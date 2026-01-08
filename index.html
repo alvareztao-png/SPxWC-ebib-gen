@@ -76,20 +76,9 @@ fetch("data/participants.json")
 // Load template image
 template.src = "assets/template.png";
 
-// --- FUZZY MATCH FUNCTION ---
-function fuzzyMatch(input, list){
-  input = input.toLowerCase();
-  let best = null;
-  let score = 0;
-  list.forEach(p => {
-    const name = p.name.toLowerCase();
-    let s = 0;
-    for(let i=0;i<Math.min(name.length,input.length);i++){
-      if(name[i]===input[i]) s++;
-    }
-    if(s>score){ score=s; best=p; }
-  });
-  return best;
+// --- EXACT MATCH FUNCTION ---
+function exactMatch(input, list){
+  return list.find(p => p.name.toLowerCase() === input.toLowerCase()) || null;
 }
 
 // --- GENERATE FUNCTION ---
@@ -97,7 +86,7 @@ function generate(){
   const inputName = document.getElementById("nameInput").value.trim();
   if(!inputName){ alert("Please enter your name"); return; }
 
-  const match = fuzzyMatch(inputName, participants);
+  const match = exactMatch(inputName, participants);
   const bibNumber = match ? match.bib : Math.floor(1000 + Math.random()*9000);
   const displayName = match ? match.name.toUpperCase() : "";
 
