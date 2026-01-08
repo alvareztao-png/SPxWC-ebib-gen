@@ -108,12 +108,12 @@ function generate(){
     ctx.fillStyle = "#000"; // Black text
 
     // BIB NUMBER
-    ctx.font = "bold 140px 'Anton', sans-serif";
+    ctx.font = "bold 180px 'Anton', sans-serif";
     ctx.fillText(bibNumber, canvas.width/2, canvas.height/2);
 
     // PARTICIPANT NAME
-    ctx.font = "bold 60px 'Anton', sans-serif";
-    if(displayName) ctx.fillText(displayName, canvas.width/2, canvas.height/2 + 120);
+    ctx.font = "bold 80px 'Anton', sans-serif";
+    if(displayName) ctx.fillText(displayName, canvas.width/2, canvas.height/2 + 150);
 
     // Setup download
     const downloadLink = document.getElementById("downloadLink");
