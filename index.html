@@ -115,17 +115,21 @@ function generate(){
     ctx.font = "bold 80px 'Anton', sans-serif";
     if(displayName) ctx.fillText(displayName, canvas.width/2, canvas.height/2 + 150);
 
-    // Setup download
+    // Setup download link
     const downloadLink = document.getElementById("downloadLink");
-    downloadLink.href = canvas.toDataURL("image/png");
-    downloadLink.download = `eBIB_${bibNumber}_${displayName.replace(/\s+/g,"_") || "guest"}.png`;
     downloadLink.style.display = "inline-block";
-  }
-}
 
-// Attach generate function to button
-document.getElementById("generateBtn").addEventListener("click", generate);
-</script>
+    // Remove previous click handler
+    downloadLink.replaceWith(downloadLink.cloneNode(true));
+    const newDownloadLink = document.getElementById("downloadLink");
 
-</body>
-</html>
+    newDownloadLink.onclick = function(e){
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      if(isIOS){
+        const imgData = canvas.toDataURL("image/png");
+        const w = window.open();
+        w.document.write('<img src="'+imgData+'" style="max-width:100%"/>');
+        return false; // prevent default
+      } else {
+        newDownloadLink.href = canvas.toDataURL("image/png");
+        newDownloadLink.download = `eBIB_${bibNumber}_$
