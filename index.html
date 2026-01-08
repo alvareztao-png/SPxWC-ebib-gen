@@ -132,4 +132,15 @@ function generate(){
         return false; // prevent default
       } else {
         newDownloadLink.href = canvas.toDataURL("image/png");
-        newDownloadLink.download = `eBIB_${bibNumber}_$
+        newDownloadLink.download = `eBIB_${bibNumber}_${displayName.replace(/\s+/g,"_") || "guest"}.png`;
+      }
+    };
+  }
+}
+
+// Attach generate function to button
+document.getElementById("generateBtn").addEventListener("click", generate);
+</script>
+
+</body>
+</html>
