@@ -24,8 +24,7 @@ h1 {
 input, button { 
   padding: 10px; 
   font-size: 16px; 
-  margin: 10px 0; 
-  width: 90%; 
+  margin: 10px 5px; 
   max-width: 400px; 
   font-family: 'Anton', sans-serif;
 }
@@ -56,11 +55,12 @@ a.download:hover {
 <p>Enter your full name</p>
 
 <input id="nameInput" placeholder="Full Name">
-<button id="generateBtn">Generate</button>
-
-<canvas id="canvas" width="1080" height="1350"></canvas>
 <br>
+<button id="generateBtn">Generate</button>
+<button id="viewBtn">View e-BIB</button>
 <a id="downloadLink" class="download" style="display:none">Download e-BIB</a>
+
+<canvas id="canvas" width="1080" height="1350" style="display:none;"></canvas>
 
 <script>
 // --- VARIABLES ---
@@ -92,6 +92,7 @@ function generate(){
 
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
+  canvas.style.display = "block"; // show canvas after generation
 
   // Ensure template is loaded before drawing
   if (!template.complete) {
@@ -119,16 +120,16 @@ function generate(){
     const downloadLink = document.getElementById("downloadLink");
     downloadLink.style.display = "inline-block";
 
-    // Remove previous click handler
-    downloadLink.replaceWith(downloadLink.cloneNode(true));
-    const newDownloadLink = document.getElementById("downloadLink");
+    // Remove previous click handler to avoid duplicates
+    const newDownloadLink = downloadLink.cloneNode(true);
+    downloadLink.parentNode.replaceChild(newDownloadLink, downloadLink);
 
     newDownloadLink.onclick = function(e){
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       if(isIOS){
         const imgData = canvas.toDataURL("image/png");
         const w = window.open();
-        w.document.write('<img src="'+imgData+'" style="max-width:100%"/>');
+        w.document.write('<img src="'+imgData+'" style="max-width:100%;height:auto;display:block;margin:20px auto;">');
         return false; // prevent default
       } else {
         newDownloadLink.href = canvas.toDataURL("image/png");
@@ -140,6 +141,17 @@ function generate(){
 
 // Attach generate function to button
 document.getElementById("generateBtn").addEventListener("click", generate);
+
+// --- VIEW BUTTON ---
+document.getElementById("viewBtn").addEventListener("click", function(){
+  const canvas = document.getElementById("canvas");
+  if(canvas.style.display === "none") return alert("Please generate your e-BIB first.");
+  
+  const imgData = canvas.toDataURL("image/png");
+  const w = window.open();
+  w.document.write('<title>Your e-BIB</title>');
+  w.document.write('<img src="'+imgData+'" style="max-width:100%;height:auto;display:block;margin:20px auto;">');
+});
 </script>
 
 </body>
