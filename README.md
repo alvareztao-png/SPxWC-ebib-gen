@@ -1,1 +1,1 @@
-# SPxWC-ebib-gen
+# SPxWC-e bib-gen
